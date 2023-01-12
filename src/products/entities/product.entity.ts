@@ -10,7 +10,7 @@ export class Product {
   })
   title: string;
 
-  @Column('numeric', {
+  @Column('float', {
     default: 0,
   })
   price: number;
@@ -33,7 +33,7 @@ export class Product {
   @Column('text', {
     array: true,
   })
-  size: string[];
+  sizes: string[];
 
   @Column('text')
   gender: string;
