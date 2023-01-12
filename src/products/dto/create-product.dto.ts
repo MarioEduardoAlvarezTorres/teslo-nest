@@ -1,11 +1,11 @@
 import {
-  IsString,
   IsArray,
   IsIn,
   IsInt,
   IsNumber,
   IsOptional,
   IsPositive,
+  IsString,
   MinLength,
 } from 'class-validator';
 
@@ -25,7 +25,7 @@ export class CreateProductDto {
 
   @IsString()
   @IsOptional()
-  slug?: number;
+  slug?: string;
 
   @IsInt()
   @IsPositive()
