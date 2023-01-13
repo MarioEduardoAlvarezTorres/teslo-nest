@@ -140,7 +140,14 @@ export class ProductsService {
       'Unexpected error, check server logs',
     );
   }
-}
-function getOne() {
-  throw new Error('Function not implemented.');
+
+  async deleteAllProducts() {
+    const query = this.productRepository.createQueryBuilder('product');
+
+    try {
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+  }
 }
