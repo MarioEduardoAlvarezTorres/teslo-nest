@@ -40,7 +40,7 @@ export class ProductsService {
 
       await this.productRepository.save(product);
 
-      return product;
+      return { ...product, images };
     } catch (error) {
       this.handleDBExceptions(error);
     }
@@ -51,8 +51,14 @@ export class ProductsService {
     const products = await this.productRepository.find({
       take: limit,
       skip: offset,
+      relations: {
+        images: true,
+      },
     });
-    return products;
+    return products.map(({ images, ...rest }) => ({
+      ...rest,
+      images: images.map((img) => img.url),
+    }));
   }
 
   async findOne(term: string) {
@@ -62,17 +68,26 @@ export class ProductsService {
       product = await this.productRepository.findOneBy({ id: term });
     } else {
       //QueryBuilder
-      const queryBuilder = this.productRepository.createQueryBuilder();
+      const queryBuilder = this.productRepository.createQueryBuilder('prod');
       product = await queryBuilder
         .where('UPPER(title) =:title or slug =:slug', {
           title: term.toUpperCase(),
           slug: term.toLowerCase(),
         })
+        .leftJoinAndSelect('prod.images', 'prodImages')
         .getOne();
     }
     if (!product)
       throw new NotFoundException(`Product with id:"${term}" not found`);
     return product;
+  }
+
+  async findOnePlain(term: string) {
+    const { images = [], ...rest } = await this.findOne(term);
+    return {
+      ...rest,
+      images: images.map((image) => image.url),
+    };
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
@@ -109,4 +124,7 @@ export class ProductsService {
       'Unexpected error, check server logs',
     );
   }
+}
+function getOne() {
+  throw new Error('Function not implemented.');
 }
