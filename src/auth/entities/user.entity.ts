@@ -10,7 +10,7 @@ export class User {
   email: string;
 
   @Column('text', {
-    unique: true,
+    select: false,
   })
   password: string;
 
