@@ -4,6 +4,7 @@ import {
   MaxLength,
   Matches,
   IsEmail,
+  IsUUID,
 } from 'class-validator';
 
 export class LoginUserDto {
