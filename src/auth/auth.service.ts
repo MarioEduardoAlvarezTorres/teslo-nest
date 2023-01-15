@@ -52,6 +52,7 @@ export class AuthService {
       throw new UnauthorizedException('Credentials are not valid');
 
     return user;
+    //TODO: RETURN JWT
   }
 
   private handleDBErrors(error: any): never {
