@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   ParseUUIDPipe,
+  Render,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -28,8 +29,11 @@ export class ProductsController {
   }
 
   @Get()
+  @Render('index')
   findAll(@Query() paginationDto: PaginationDto) {
-    return this.productsService.findAll(paginationDto);
+    return this.productsService
+      .findAll(paginationDto)
+      .then((result) => (result ? { products: result } : { products: [] }));
   }
 
   @Get(':term')
